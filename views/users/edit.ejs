@@ -1,0 +1,32 @@
+<% layout('layouts/boilerplate') %>
+<div class="row">
+    <h1 class="text-center">Edit User</h1>
+    <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+        <div class="card shadow">
+            <div class="col-md-6 offset-md-3">
+                <form action="/users/<%=user._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+                    <div class="mb-3">
+                        <label class="form-label" for="username">Username</label>
+                        <input class="form-control" type="text" id="username" name="user[username]"
+                               value="<%=user.username%>" required autofocus>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-control" type="email" id="email" name="user[email]"
+                               value="<%=user.email%>" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <button class="btn btn-info">Update User</button>
+                    </div>
+                </form>
+                <a href="/users/<%=user._id%>">Back To User</a>
+            </div>
+        </div>
+    </div>
+</div>

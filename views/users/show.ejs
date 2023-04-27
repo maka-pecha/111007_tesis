@@ -1,0 +1,23 @@
+<% layout('layouts/boilerplate')%>
+<link rel="stylesheet" href="/stylesheets/stars.css">
+<div class="row">
+    <div class="col-md6 offset-md-3 col-xl-4 offset-xl-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Username: <%=user.username%></h5>
+                <p class="card-text">Email: <%=user.email%></p>
+                <img src="https://res.cloudinary.com/douqbebwk/image/upload/v1600060601/YelpCamp/ahfnenvca4tha00h2ubt.png" class="d-block w-100" alt="">
+            </div>
+            <div class="card-body">
+                <a class="card-link btn btn-info" href="/users/<%=user._id%>/edit">Edit</a>
+            </div>
+            <div class="card-footer text-muted">
+                2 days ago
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const user = <%- JSON.stringify(user) %>
+</script>

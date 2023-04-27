@@ -20,6 +20,12 @@ const UserSchema = new Schema({
         unique: true
     },
     image: [ImageSchema],
+    verificationToken: {
+        type: String,
+    },
+    isValidToken: {
+        type: Boolean,
+    },
 }, opts);
 
 UserSchema.plugin(passportLocalMongoose);
