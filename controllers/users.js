@@ -6,7 +6,7 @@ module.exports.renderRegister = (req, res) => {
     res.render('users/register');
 }
 
-module.exports.register = async (req, res, next) => {
+module.exports.register = async (req, res) => {
     try {
         const { email, username, password } = req.body;
         // Generate token
@@ -40,13 +40,76 @@ module.exports.register = async (req, res, next) => {
     }
 }
 
+module.exports.renderForgotPassword = async (req, res) => {
+    res.render('users/forgotPassword');
+}
+
+module.exports.forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const token = generateVerificationToken();
+        const user = await User.findOneAndUpdate({ email }, { verificationToken: token });
+        await user.save();
+        const verifyUrl = `${req.protocol}://${req.get('host')}/restore-password/${token}`;
+        const message =
+            `<div>
+                <div>Hello ${user.username}, please click on the following link to restore your password:</div> 
+                <a href=${verifyUrl}>${verifyUrl}</a>
+            </div>`;
+        await sendEmail({
+            recipient: email,
+            subject: 'Restore your password',
+            message
+        });
+        req.flash('success', 'Restore password email sent. Please check your email');
+        res.redirect('/login');
+    } catch (e) {
+        req.flash('error', e.message);
+        res.redirect('/login');
+    }
+}
+
+module.exports.renderRestorePassword = async (req, res) => {
+    const { token } = req.params;
+    const user = await User.findOne({ verificationToken: token });
+    res.render('users/restorePassword', { user });
+}
+
+module.exports.restorePassword = async (req, res) => {
+    try {
+        const { token } = req.params;
+        await User.findOne({ verificationToken: token }, async (err, user) => {
+            try {
+                await user.setPassword(req.body.user.password, async (err, user) => {
+                    try {
+                        user.resetPasswordToken = undefined;
+                        user.resetPasswordExpires = undefined;
+                        await user.save()
+                        req.flash('success', 'Password restored!');
+                        return res.redirect('/login')
+                    } catch (err) {
+                        req.flash('error', 'Sorry something went wrong')
+                        return res.redirect('/login')
+                    }
+                });
+            } catch (err) {
+                req.flash('error', 'Password reset token is invalid or has expired')
+                return res.redirect('/login')
+            }
+        });
+    } catch (e) {
+        req.flash('error', e.message);
+        return res.redirect('/login');
+    }
+}
+
 module.exports.showUser = async (req, res) => {
     const user = await User.findById(req.params.id);
     if (!user) {
         req.flash('error', 'Cannot find the current User!');
         return res.redirect('/user');
     }
-    res.render('users/show', { user });
+    return res.render('users/show', { user });
 }
 
 module.exports.renderEditForm = async (req, res) => {

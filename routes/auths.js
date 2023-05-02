@@ -15,6 +15,14 @@ router.route('/login')
 router.route('/verify/:id/:token')
     .get(users.renderVerify)
 
+router.route('/forgot-password')
+    .get(users.renderForgotPassword)
+    .put(users.forgotPassword)
+
+router.route('/restore-password/:token')
+    .get(users.renderRestorePassword)
+    .put(users.restorePassword)
+
 router.get('/logout', users.logout)
 
 module.exports = router;
