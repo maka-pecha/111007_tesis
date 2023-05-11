@@ -3,11 +3,11 @@
     <div class="row">
         <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
             <div class="card shadow">
-                <img src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
+                <img src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png"
                     alt="" class="card-img-top" />
                 <div class="card-body">
                     <h5 class="card-title">Register</h5>
-                    <form action="/register" method="POST" class="validated-form" novalidate>
+                    <form action="/register" method="POST" class="validated-form" enctype="multipart/form-data" novalidate>
                         <div class="mb-3">
                             <label class="form-label" for="username">Username</label>
                             <input class="form-control" type="text" id="username" name="username" required autofocus>
@@ -27,6 +27,15 @@
                             <input class="form-control" type="password" id="password" name="password" required>
                             <div class="valid-feedback">
                                 Looks good!
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-file custom-file">
+                                <input type="file" class="form-file-input" id="image" name="image">
+                                <label class="form-file-label" for="image">
+                                    <span class="form-file-text custom-file-label">Choose image...</span>
+                                    <span class="form-file-button">Browse</span>
+                                </label>
                             </div>
                         </div>
                         <button class="btn btn-success btn-block">Register</button>

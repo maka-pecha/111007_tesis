@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const flash = require('connect-flash');
+const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -15,6 +16,8 @@ const User = require('./models/user');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const userRoutes = require('./routes/users');
+const placeRoutes = require('./routes/places');
+const reviewRoutes = require('./routes/reviews');
 const authRoutes = require('./routes/auths');
 
 const MongoDBStore = require("connect-mongo")(session);
@@ -114,6 +117,7 @@ app.use(
                 "blob:",
                 "data:",
                 "https://res.cloudinary.com/douqbebwk/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
+                "https://res.cloudinary.com/ddsxauxqi/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
                 "https://images.unsplash.com",
                 "https://www.empathia.com/",
                 "https://cdn-icons-png.flaticon.com/",
@@ -141,6 +145,8 @@ app.use((req, res, next) => {
 
 app.use('/', authRoutes);
 app.use('/users', userRoutes);
+app.use('/places', placeRoutes)
+app.use('/places/:id/reviews', reviewRoutes)
 
 
 app.get('/', (req, res) => {

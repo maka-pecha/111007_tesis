@@ -1,34 +1,53 @@
 <% layout('layouts/boilerplate') %>
 <div class="row">
     <h1 class="text-center">Edit User</h1>
-    <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
-        <div class="card shadow">
-            <img src="https://cdn.onlinewebfonts.com/svg/img_519216.png"
-                 alt="" class="card-img-top"/>
-            <div class="col-md-6 offset-md-3">
-                <form action="/users/<%=user._id%>?_method=PUT" method="POST" novalidate class="validated-form">
-                    <div class="mb-3">
-                        <label class="form-label" for="username">Username</label>
-                        <input class="form-control" type="text" id="username" name="user[username]"
-                               value="<%=user.username%>" required autofocus>
-                        <div class="valid-feedback">
-                            Looks good!
-                        </div>
+        <div class="col-md-6 offset-md-3">
+            <form action="/users/<%=user._id%>?_method=PUT" method="POST" novalidate class="validated-form"
+                  enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label" for="username">Username</label>
+                    <input class="form-control" type="text" id="username" name="user[username]"
+                           value="<%=user.username%>" required autofocus>
+                    <div class="valid-feedback">
+                        Looks good!
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="email">Email</label>
-                        <input class="form-control" type="email" id="email" name="user[email]"
-                               value="<%=user.email%>" required>
-                        <div class="valid-feedback">
-                            Looks good!
-                        </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="email">Email</label>
+                    <input class="form-control" type="email" id="email" name="user[email]"
+                           value="<%=user.email%>" required>
+                    <div class="valid-feedback">
+                        Looks good!
                     </div>
-                    <div class="mb-3">
-                        <button class="btn btn-info">Update User</button>
+                </div>
+                <% if(currentUser && currentUser.isAdmin) { %>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="isAdmin" value="true" name="user[isAdmin]" <%= user.isAdmin ? 'checked' : '' %>>
+                    <label class="form-check-label" for="isAdmin">Is Admin?</label>
+                </div>
+                <% } %>
+                <div class="mb-3">
+                    <div class="form-file custom-file">
+                        <input type="file" class="form-file-input" id="image" name="image">
+                        <label class="form-file-label" for="image">
+                            <span class="form-file-text custom-file-label">Add an image...</span>
+                            <span class="form-file-button">Browse</span>
+                        </label>
                     </div>
-                </form>
-                <a href="/users/<%=user._id%>">Back To User</a>
-            </div>
+                </div>
+                <div class="mb-3">
+                    <% user?.image?.forEach(function(img, i) {  %>
+                    <img src="<%=img.thumbnail %>" class="img-thumbnail" alt="">
+                    <div class="form-check-inline">
+                        <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+                    </div>
+                    <label for="image-<%=i%>">Delete?</label>
+                    <% })%>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-info">Update User</button>
+                </div>
+            </form>
+            <a href="/users/<%=user._id%>">Back To User</a>
         </div>
-    </div>
 </div>

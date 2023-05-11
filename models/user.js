@@ -26,6 +26,9 @@ const UserSchema = new Schema({
     isValidToken: {
         type: Boolean,
     },
+    isAdmin: {
+        type: Boolean,
+    },
 }, opts);
 
 UserSchema.plugin(passportLocalMongoose);

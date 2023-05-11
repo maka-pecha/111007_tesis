@@ -1,0 +1,33 @@
+<% layout('layouts/boilerplate')%>
+<div class="container">
+    <h1>All Users</h1>
+
+    <% for (let user of users){%>
+    <div class="card mb-3">
+        <div class="row">
+            <div class="col-md-4 image-container">
+                <%if(user.image.length) {%>
+                <img class="img-fluid" alt="" src="<%=user.image[0].url%>">
+                <% } else {%>
+                <img class="img-fluid" alt=""
+                    src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png">
+                <% } %>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title"><%= user.username %> </h5>
+
+                    <p class="card-text"><%= user.email %></p>
+                    <a class="btn btn-primary" href="/users/<%=user._id%>">View <%=user.title%></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% }%>
+</div>
+<script>
+    const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+    const users = { features: <%- JSON.stringify(users) %>}
+</script>
+
+<script src="/javascripts/clusterMap.js"></script>

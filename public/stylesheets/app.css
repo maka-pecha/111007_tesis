@@ -1,9 +1,24 @@
-#cluster-map {
+.col-md-4 img.img-fluid, .carousel-item img {
     width: 100%;
-    height: 500px;
+    object-fit: cover;
 }
 
-#map {
-    width: 100%;
-    height: 300px;
+.col-md-4 img.img-fluid {
+    height: 200px;
+}
+
+.carousel-item img {
+    height: 400px;
+}
+
+.capitalize-text {
+    text-transform: capitalize;
+}
+
+.image-container {
+    width: 200px;
+    height: 200px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }

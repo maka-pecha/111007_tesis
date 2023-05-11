@@ -2,22 +2,28 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#">DonateOnNetwork</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-link" href="/">Home</a>
-                <a class="nav-link" href="/">Places</a>
-                <a class="nav-link" href="/">New Place</a>
+                <a class="nav-link" href="/places">Places</a>
+                <a class="nav-link" href="/places/new">New Place</a>
             </div>
             <div class="navbar-nav ml-auto">
-                <% if(!currentUser || !(currentUser.isValidToken)) {%>
-                <a class="nav-link" href="/login">Login</a>
-                <a class="nav-link" href="/register">Register</a>
-                <% } else {%>
-                <a class="nav-link" href="/users/<%=currentUser._id%>"><%=currentUser.username%></a>
-                <a class="nav-link" href="/logout">Logout</a>
+                <% if(!currentUser || !(currentUser.isValidToken)) { %>
+                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="/register">Register</a>
+                <% } else { %>
+                    <% if (currentUser && currentUser.isAdmin) { %>
+                    <a class="nav-link" href="/users">Users</a>
+                    <a class="nav-link" href="/users/new">New User</a>
+                    <% } %>
+                    <a class="nav-link" href="/users/<%=currentUser._id%>">
+                        <p class="capitalize-text"><%=currentUser.username%></p>
+                    </a>
+                    <a class="nav-link" href="/logout">Logout</a>
                 <% } %>
             </div>
         </div>

@@ -27,7 +27,9 @@ module.exports.userSchema = Joi.object({
     user: Joi.object({
         username: Joi.string().required().escapeHTML(),
         email: Joi.string().required().escapeHTML(),
-    }).required()
+        isAdmin: Joi.invalid(false),
+    }).required(),
+    deleteImages: Joi.array()
 });
 
 module.exports.placeSchema = Joi.object({
@@ -46,4 +48,3 @@ module.exports.reviewSchema = Joi.object({
         body: Joi.string().required().escapeHTML()
     }).required()
 })
-

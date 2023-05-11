@@ -3,10 +3,13 @@ const router = express.Router();
 const passport = require('passport');
 const users = require('../controllers/users');
 const catchAsync = require('../utils/catchAsync');
+const multer = require("multer");
+const { storage } = require("../cloudinary");
+const upload = multer({ storage });
 
 router.route('/register')
     .get(users.renderRegister)
-    .post(catchAsync(users.register));
+    .post(upload.array('image'),catchAsync(users.register));
 
 router.route('/login')
     .get(users.renderLogin)
