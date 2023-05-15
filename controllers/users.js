@@ -229,7 +229,7 @@ module.exports.login = (req, res) => {
 
 }
 
-module.exports.deletePlace = async (req, res) => {
+module.exports.deleteUser = async (req, res) => {
     const { id } = req.params;
     await User.findByIdAndDelete(id);
     req.flash('success', 'Successfully deleted user')
