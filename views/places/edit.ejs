@@ -1,13 +1,13 @@
-<% layout('layouts/boilerplate')%>
+<% layout('layouts/boilerplate') %>
 <div class="row">
     <h1 class="text-center">Edit Place</h1>
     <div class="col-md-6 offset-md-3">
-        <form action="/places/<%=place._id%>?_method=PUT" method="POST" novalidate class="validated-form"
-            enctype="multipart/form-data">
+        <form action="/places/<%= place._id %>?_method=PUT" method="POST" novalidate class="validated-form"
+              enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
                 <input class="form-control" type="text" id="title" name="place[title]"
-                    value="<%=place.title %>" required autofocus>
+                       value="<%= place.title %>" required autofocus>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
@@ -15,7 +15,7 @@
             <div class="mb-3">
                 <label class="form-label" for="location">Location</label>
                 <input class="form-control" type="text" id="location" name="place[location]"
-                    value="<%=place.location %>" required>
+                       value="<%= place.location %>" required>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
@@ -26,8 +26,9 @@
                 <div class="input-group">
                     <span class="input-group-text" id="price-label">$</span>
                     <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
-                        aria-describedby="price-label" name="place[price]" value="<%=place.price %>"
-                        required>\<div class="valid-feedback">
+                           aria-describedby="price-label" name="place[price]" value="<%= place.price %>"
+                           required>
+                    <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
@@ -36,7 +37,7 @@
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
                 <textarea class="form-control" type="text" id="description" name="place[description]"
-                    required><%= place.description%></textarea>
+                          required><%= place.description %></textarea>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
@@ -51,19 +52,19 @@
                 </div>
             </div>
             <div class="mb-3">
-                <% place?.images?.forEach(function(img, i) {  %>
+                <% place?.images?.forEach(function(img, i) { %>
 
-                <img src="<%=img.thumbnail %>" class="img-thumbnail" alt="">
+                <img src="<%= img.thumbnail %>" class="img-thumbnail" alt="">
                 <div class="form-check-inline">
-                    <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+                    <input type="checkbox" id="image-<%= i %>" name="deleteImages[]" value="<%= img.filename %>">
                 </div>
-                <label for="image-<%=i%>">Delete?</label>
-                <% })%>
+                <label for="image-<%= i %>">Delete?</label>
+                <% }) %>
             </div>
             <div class="mb-3">
                 <button class="btn btn-info">Update Place</button>
             </div>
         </form>
-        <a href="/places/<%= place._id%>">Back To Place</a>
+        <a href="/places/<%= place._id %>">Back To Place</a>
     </div>
 </div>
