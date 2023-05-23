@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const { subscribeToPlaces, subscribeToChat } = require('../middleware');
 
 router.route('/')
-    .get(subscribeToPlaces,subscribeToChat,catchAsync(chat.showChat))
+    .get(subscribeToPlaces, subscribeToChat, catchAsync(chat.showChat))
     .post(chat.message)
 router.route('/messages')
     .get(chat.getMes)

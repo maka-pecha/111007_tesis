@@ -1,31 +1,41 @@
 <% layout('layouts/boilerplate')%>
 
-<ul id="messageList"></ul>
-
-<div class="row">
-    <div>
-        <ul class="list-group">
-            <% messages.forEach(function(message) { %>
-              <li class="list-group-item">
-                <h4 class="uuid"><%= message.user %></h4>
-                <h2 class="message-text"><%= message.message %></h2>
-              </li>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <% messages.forEach(function(message, index) { %>
+            <div class="d-flex align-items-start my-3 pb-2">
+                <div class="mr-3">
+                    <%if(message?.image?.length) {%>
+                    <img class="rounded-circle" alt="" src="<%=message?.image[0]?.url%>" style="width: 60px; height: 60px; object-fit: cover;">
+                    <% } else {%>
+                        <img class="rounded-circle" alt="" src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png" style="width: 60px; height: 60px; object-fit: cover;">
+                    <% } %>
+                </div>
+                <div class="flex-grow-1 chat-message">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="mb-1 capitalize-text"><%= message.user %></h5>
+                        <small class="text-muted"><%= message.date %></small>
+                    </div>
+                    <p class="mb-1 text-muted"><%= message.message %></p>
+                </div>
+            </div>
             <% }); %>
-          </ul>
-          
-          
-          
-    </div>
-    <div class="col-md-6 offset-md-3">
-        <form action="/chat/" method="POST" novalidate class="validated-form">
-            <div class="mb-3">
-                <input class="form-control" type="text" id="message" name="message" required>
-
-            </div>
-            
-            <div class="mb-3">
-                <button class="btn btn-success">Send message</button>
-            </div>
-        </form>
+        </div>
+        <div class="col-md-4">
+            <form action="/chat/" method="POST" novalidate class="validated-form">
+                <div class="mb-3">
+                    <label for="message" class="form-label">Your message</label>
+                    <textarea class="form-control" id="message" name="message" rows="3" required placeholder="Type your message here"></textarea>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary btn-block">Send message</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+<script>
+    const messages = <%- JSON.stringify(messages) %>
+</script>

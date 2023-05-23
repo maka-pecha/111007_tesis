@@ -33,8 +33,6 @@ module.exports.message = async (req, res) => {
 
     const subscribedChannels = pubnubInstance.getSubscribedChannels();
 
-
-
     console.log(req.body.message)
     console.log(subscribedChannels)
 
@@ -45,38 +43,35 @@ module.exports.message = async (req, res) => {
             description: msg
         }
     };
-
     const status = await pubnubInstance.publish(publishPayload);
-
-
     res.redirect('./');
 }
 
 module.exports.showChat = async (req, res) => {
-
     const pubnubInstance = PubNub.getInstance(req.user._id);
     const subscribedChannels = pubnubInstance.getSubscribedChannels();
     const id = subscribedChannels[subscribedChannels.length -1 ].split('.')[1];
-    chats = await getChat(pubnubInstance,'user')
-    messages = []
+    const chats = await getChat(pubnubInstance,'user')
+    const messages = []
     if (chats) {
         for (let chat of chats){
             const user = await User.findById(chat.uuid);
-            const username = user.username
-            const message = chat.message.description
-            messages.push({user:username,message:message})
+            const username = user ? user.username : 'Unknown User';
+            const message = chat.message.description;
+            const timestamp = chat.timetoken / 10000;
+            const date = new Date(timestamp).toLocaleString();
+            const image = user?.image;
+            messages.push({ user: username, image, message, date })
         }
     }
-    console.log(messages)
-    res.render('chat/show',{id,messages});
+    res.render('chat/show',{ id, messages });
 }
 
-module.exports.getMes = async (req, res,) => {
-
+module.exports.getMes = async (req, res) => {
     const pubnubInstance = PubNub.getInstance('646cbc486b7c862ab8b9cbaf')
     // const pubnubInstance = PubNub.getInstance(req.user._id)
-    chats = await getChat(pubnubInstance,'users')
-    messages = []
+    const chats = await getChat(pubnubInstance,'users')
+    const messages = []
     for (let chat of chats){
         const user = await User.findById(chat.uuid);
         const username = user.username
@@ -84,6 +79,6 @@ module.exports.getMes = async (req, res,) => {
         messages.push({user:username,message:message})
     }
     console.log(messages)
-    data = {id:id,messages:messages,pubnubInstance:pubnubInstance}
+    const data = {id:id,messages:messages,pubnubInstance:pubnubInstance}
     res.json(JSON.stringify(data));
 }
