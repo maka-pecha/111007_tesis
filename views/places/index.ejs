@@ -1,4 +1,5 @@
 <% layout('layouts/boilerplate')%>
+<div id="cluster-map"></div>
 <div class="container">
     <h1>All Places</h1>
 
@@ -22,6 +23,7 @@
                         <small class="text-muted"><%= place.location%></small>
                     </p>
                     <a class="btn btn-primary" href="/places/<%=place._id%>">View <%=place.title%></a>
+                    <a class="btn btn-primary" href="/chat/">Global Chat</a>
                 </div>
             </div>
         </div>

@@ -19,6 +19,7 @@ const userRoutes = require('./routes/users');
 const placeRoutes = require('./routes/places');
 const reviewRoutes = require('./routes/reviews');
 const authRoutes = require('./routes/auths');
+const chatRoutes = require('./routes/chat');
 
 const MongoDBStore = require("connect-mongo")(session);
 
@@ -44,6 +45,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(mongoSanitize({
@@ -147,6 +149,7 @@ app.use('/', authRoutes);
 app.use('/users', userRoutes);
 app.use('/places', placeRoutes)
 app.use('/places/:id/reviews', reviewRoutes)
+app.use('/chat', chatRoutes)
 
 
 app.get('/', (req, res) => {

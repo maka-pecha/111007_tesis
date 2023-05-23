@@ -1,0 +1,31 @@
+<% layout('layouts/boilerplate')%>
+
+<ul id="messageList"></ul>
+
+<div class="row">
+    <div>
+        <ul class="list-group">
+            <% messages.forEach(function(message) { %>
+              <li class="list-group-item">
+                <h4 class="uuid"><%= message.user %></h4>
+                <h2 class="message-text"><%= message.message %></h2>
+              </li>
+            <% }); %>
+          </ul>
+          
+          
+          
+    </div>
+    <div class="col-md-6 offset-md-3">
+        <form action="/chat/" method="POST" novalidate class="validated-form">
+            <div class="mb-3">
+                <input class="form-control" type="text" id="message" name="message" required>
+
+            </div>
+            
+            <div class="mb-3">
+                <button class="btn btn-success">Send message</button>
+            </div>
+        </form>
+    </div>
+</div>

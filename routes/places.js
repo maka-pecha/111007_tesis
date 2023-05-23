@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const places = require('../controllers/places');
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, isAuthor, validatePlace } = require('../middleware');
+const { isLoggedIn, isAuthor, validatePlace, subscribeToPlaces } = require('../middleware');
 const multer = require('multer');
 const { storage } = require('../cloudinary');
 const upload = multer({ storage });
 
 router.route('/')
-    .get(catchAsync(places.index))
+    .get(subscribeToPlaces,catchAsync(places.index))
     .post(isLoggedIn, upload.array('image'), validatePlace, catchAsync(places.createPlace))
 
 
