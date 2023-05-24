@@ -8,9 +8,9 @@
             <div class="d-flex align-items-start my-3 pb-2">
                 <div class="mr-3">
                     <%if(message?.image?.length) {%>
-                    <img class="rounded-circle" alt="" src="<%=message?.image[0]?.url%>" style="width: 60px; height: 60px; object-fit: cover;">
+                    <img class="rounded-circle chat-image" alt="" src="<%=message?.image[0]?.url%>">
                     <% } else {%>
-                        <img class="rounded-circle" alt="" src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png" style="width: 60px; height: 60px; object-fit: cover;">
+                        <img class="rounded-circle chat-image" alt="" src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png">
                     <% } %>
                 </div>
                 <div class="flex-grow-1 chat-message">
