@@ -52,15 +52,17 @@
 
     document.getElementById('form').addEventListener('submit', function (e) {
         const input = document.getElementById('message');
-        const date = new Date().toLocaleString();
-        // Cuando se envía el formulario, emitimos el evento 'new message' con el valor de entrada
-        const msg = {
-            user: user.username,
-            image: user.image,
-            message: input.value,
-            date,
+        if(input.value !== '') {
+            const date = new Date().toLocaleString();
+            // Cuando se envía el formulario, emitimos el evento 'new message' con el valor de entrada
+            const msg = {
+                user: user.username,
+                image: user.image,
+                message: input.value,
+                date,
+            }
+            socket.emit('new message', msg);
         }
-        socket.emit('new message', msg);
     });
 
     // Cuando se recibe un nuevo mensaje, lo añadimos a la lista de mensajes
