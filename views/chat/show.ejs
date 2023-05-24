@@ -1,30 +1,32 @@
 <% layout('layouts/boilerplate')%>
-
 <div class="container">
     <div class="row">
         <h1 class="text-left">Global Chat</h1>
-        <div class="col-md-8">
+        <div class="col-md-8 chat-column" id="chat-column">
             <% messages.forEach(function(message, index) { %>
-            <div class="d-flex align-items-start my-3 pb-2">
-                <div class="mr-3">
-                    <%if(message?.image?.length) {%>
-                    <img class="rounded-circle chat-image" alt="" src="<%=message?.image[0]?.url%>">
-                    <% } else {%>
-                        <img class="rounded-circle chat-image" alt="" src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png">
-                    <% } %>
-                </div>
-                <div class="flex-grow-1 chat-message">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="mb-1 capitalize-text"><%= message.user %></h5>
-                        <small class="text-muted"><%= message.date %></small>
+            <div>
+                <div class="d-flex align-items-start my-3 pb-2">
+                    <div class="mr-3">
+                        <%if(message?.image?.length) {%>
+                        <img class="rounded-circle chat-image" alt="" src="<%=message?.image[0]?.url%>">
+                        <% } else {%>
+                            <img class="rounded-circle chat-image" alt="" src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png">
+                        <% } %>
                     </div>
-                    <p class="mb-1 text-muted"><%= message.message %></p>
+                    <div class="flex-grow-1 chat-message">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="mb-1 capitalize-text"><%= message.user %></h5>
+                            <small class="text-muted"><%= message.date %></small>
+                        </div>
+                        <p class="mb-1 text-muted"><%= message.message %></p>
+                    </div>
                 </div>
             </div>
             <% }); %>
+            <div id="messages"></div>
         </div>
         <div class="col-md-4">
-            <form action="/chat/" method="POST" novalidate class="validated-form">
+            <form id="form" action="/chat/" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
                     <label for="message" class="form-label">Your message</label>
                     <textarea class="form-control" id="message" name="message" rows="3" required placeholder="Type your message here"></textarea>
@@ -38,5 +40,52 @@
 </div>
 
 <script>
+    const scrollFromBottom = function() {
+        const chatColumn = document.getElementById('chat-column');
+        chatColumn.scrollTop = chatColumn.scrollHeight;
+    }
+
+    window.onload = scrollFromBottom;
+
+    const socket = io();
+    const user = <%- JSON.stringify(currentUser) %>
+
+    document.getElementById('form').addEventListener('submit', function (e) {
+        const input = document.getElementById('message');
+        const date = new Date().toLocaleString();
+        // Cuando se envía el formulario, emitimos el evento 'new message' con el valor de entrada
+        const msg = {
+            user: user.username,
+            image: user.image,
+            message: input.value,
+            date,
+        }
+        socket.emit('new message', msg);
+    });
+
+    // Cuando se recibe un nuevo mensaje, lo añadimos a la lista de mensajes
+    socket.on('new message', function(msg) {
+        const item = document.createElement("div");
+        item.id = 'new-message'
+        item.classList.add('d-flex');
+        item.classList.add('align-items-start');
+        item.classList.add('my-3');
+        item.classList.add('pb-2');
+        msg.image = msg.image ?? ['https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png'];
+        item.innerHTML = `
+                <div class="mr-3">
+                    <img class="rounded-circle chat-image" alt="" src="${msg?.image[0]?.url}">
+                </div>
+                <div class="flex-grow-1 chat-message">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="mb-1 capitalize-text">${msg.user}</h5>
+                        <small class="text-muted">${msg.date}</small>
+                    </div>
+                    <p class="mb-1 text-muted">${msg.message}</p>
+                </div>
+        `;
+        document.getElementById('messages').appendChild(item);
+        scrollFromBottom();
+    });
     const messages = <%- JSON.stringify(messages) %>
 </script>

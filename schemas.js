@@ -48,3 +48,7 @@ module.exports.reviewSchema = Joi.object({
         body: Joi.string().required().escapeHTML()
     }).required()
 })
+
+module.exports.messageSchema = Joi.object({
+    message: Joi.string().required().escapeHTML()
+})

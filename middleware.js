@@ -1,4 +1,4 @@
-const { placeSchema, reviewSchema, userSchema } = require('./schemas.js');
+const { placeSchema, reviewSchema, userSchema, messageSchema } = require('./schemas.js');
 const PubNub = require('./chat/pubnubConfig');
 const ExpressError = require('./utils/ExpressError');
 const Place = require('./models/place');
@@ -62,7 +62,17 @@ module.exports.isReviewAuthor = async (req, res, next) => {
 }
 
 module.exports.validateReview = (req, res, next) => {
-    const {error} = reviewSchema.validate(req.body);
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
+module.exports.validateMessage = (req, res, next) => {
+    const { error } = messageSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)

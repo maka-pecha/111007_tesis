@@ -59,3 +59,17 @@
     height: 60px;
     object-fit: cover;
 }
+
+
+.chat-column {
+    height: 70vh;  /* 70% of the viewport height */
+    overflow-y: auto;  /* enable vertical scroll */
+    box-shadow: inset 0 0 10px #00000015; /* shadow inside the box */
+}
+
+/* adjust the height for smaller screens */
+@media (max-width: 576px) {
+    .chat-column {
+        height: 50vh;
+    }
+}

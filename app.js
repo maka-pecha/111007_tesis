@@ -15,6 +15,11 @@ const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
+const app = express();
+const { createServer } = require('http');
+const { Server } = require('socket.io');
+const httpServer = createServer(app);
+const io = new Server(httpServer);
 const userRoutes = require('./routes/users');
 const placeRoutes = require('./routes/places');
 const reviewRoutes = require('./routes/reviews');
@@ -38,11 +43,22 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
-const app = express();
-
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
+
+io.on('connection', function(socket) {
+    console.log('A user connected');
+
+    socket.on('new message', function(msg) {
+        // Cuando se recibe un nuevo mensaje, se retransmite a todos los clientes
+        io.emit('new message', msg);
+    });
+
+    socket.on('disconnect', function() {
+        console.log('A user disconnected');
+    });
+});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -80,7 +96,6 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 app.use(helmet());
-
 
 const scriptSrcUrls = [
     "https://stackpath.bootstrapcdn.com",
@@ -150,7 +165,7 @@ app.use('/users', userRoutes);
 app.use('/places', placeRoutes)
 app.use('/places/:id/reviews', reviewRoutes)
 app.use('/chat', chatRoutes)
-
+app.use(express.static(path.join(__dirname, 'node_modules/socket.io/client-dist')));
 
 app.get('/', (req, res) => {
     res.render('home')
@@ -168,6 +183,6 @@ app.use((err, req, res, next) => {
 })
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+httpServer.listen(port, () => {
     console.log(`Serving on port ${port}`)
 })
