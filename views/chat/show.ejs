@@ -4,22 +4,20 @@
         <h1 class="text-left">Global Chat</h1>
         <div class="col-md-8 chat-column" id="chat-column">
             <% messages.forEach(function(message, index) { %>
-            <div>
-                <div class="d-flex align-items-start my-3 pb-2">
-                    <div class="mr-3">
-                        <%if(message?.image?.length) {%>
-                        <img class="rounded-circle chat-image" alt="" src="<%=message?.image[0]?.url%>">
-                        <% } else {%>
-                            <img class="rounded-circle chat-image" alt="" src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png">
-                        <% } %>
+            <div class="d-flex <%= message.user === currentUser.username ? 'self ' : '' %> align-items-start my-3 pb-2">
+                <div class="<%= message.user === currentUser.username ? 'ml-3' : 'mr-3' %>">
+                    <%if(message?.image?.length) {%>
+                    <img class="rounded-circle chat-image" alt="" src="<%=message?.image[0]?.url%>">
+                    <% } else {%>
+                        <img class="rounded-circle chat-image" alt="" src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png">
+                    <% } %>
+                </div>
+                <div class="flex-grow-1 <%= message.user === currentUser.username ? 'chat-message-self' : 'chat-message' %>">
+                    <div class="d-flex justify-content-between p-2 <%= message.user === currentUser.username ? 'self' : '' %>">
+                        <h5 class="mb-1 capitalize-text"><%= message.user %></h5>
+                        <small class="text-muted"><%= message.date %></small>
                     </div>
-                    <div class="flex-grow-1 chat-message">
-                        <div class="d-flex justify-content-between">
-                            <h5 class="mb-1 capitalize-text"><%= message.user %></h5>
-                            <small class="text-muted"><%= message.date %></small>
-                        </div>
-                        <p class="mb-1 text-muted"><%= message.message %></p>
-                    </div>
+                    <p class="mb-1 text-muted"><%= message.message %></p>
                 </div>
             </div>
             <% }); %>
@@ -73,13 +71,16 @@
         item.classList.add('align-items-start');
         item.classList.add('my-3');
         item.classList.add('pb-2');
+        if(msg.user === user.username) {
+            item.classList.add('self');
+        }
         msg.image = msg.image ?? ['https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png'];
         item.innerHTML = `
                 <div class="mr-3">
                     <img class="rounded-circle chat-image" alt="" src="${msg?.image[0]?.url}">
                 </div>
-                <div class="flex-grow-1 chat-message">
-                    <div class="d-flex justify-content-between">
+                <div class="flex-grow-1 ${msg.user === user.username ? 'chat-message-self' : 'chat-message'}">
+                <div class="d-flex justify-content-between p-2 ${msg.user === user.username ? 'self' : ''}">
                         <h5 class="mb-1 capitalize-text">${msg.user}</h5>
                         <small class="text-muted">${msg.date}</small>
                     </div>
