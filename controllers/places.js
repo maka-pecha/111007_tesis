@@ -4,6 +4,7 @@ const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 const { cloudinary } = require("../cloudinary");
+const mercadopago = require("../mercadoPago");
 
 module.exports.index = async (req, res) => {
     const places = await Place.find({}).populate('popupText');
@@ -44,7 +45,7 @@ module.exports.showPlace = async (req, res,) => {
         req.flash('error', 'Cannot find that place!');
         return res.redirect('/places');
     }
-    res.render('places/show', { place, date });
+    res.render('places/show', { place, date, mpUserId: place.mpUserId });
 }
 
 module.exports.renderEditForm = async (req, res) => {
@@ -77,4 +78,17 @@ module.exports.deletePlace = async (req, res) => {
     await Place.findByIdAndDelete(id);
     req.flash('success', 'Successfully deleted place')
     res.redirect('/places');
+}
+
+module.exports.donate = async (req, res) => {
+    try {
+        const place = await Place.findById(req.params.id);
+        req.body.place = place;
+        await mercadopago.configure(place.mpAccessToken);
+        const preferenceId = await mercadopago.createPreference(req, res);
+        res.redirect(`https://www.mercadopago.com/mla/checkout/start?pref_id=${preferenceId}`);
+    } catch (e) {
+        req.flash('error', 'Temporally, cannot donate to this place');
+        res.redirect(`/places/${place._id}`)
+    }
 }

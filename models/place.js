@@ -33,6 +33,7 @@ const PlaceSchema = new Schema({
     price: Number,
     description: String,
     location: String,
+    mpAccessToken: String,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'

@@ -37,7 +37,8 @@ module.exports.placeSchema = Joi.object({
         title: Joi.string().required().escapeHTML(),
         price: Joi.number().required().min(0),
         location: Joi.string().required().escapeHTML(),
-        description: Joi.string().required().escapeHTML()
+        description: Joi.string().required().escapeHTML(),
+        mpAccessToken: Joi.string().allow('', null)
     }).required(),
     deleteImages: Joi.array()
 });

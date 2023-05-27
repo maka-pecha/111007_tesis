@@ -1,5 +1,6 @@
 <% layout('layouts/boilerplate')%>
 <link rel="stylesheet" href="/stylesheets/stars.css">
+<script src="https://sdk.mercadopago.com/js/v2"></script>
 <div class="row">
     <div class="col-6">
         <div id="placeCarousel" class="carousel slide" data-ride="carousel">
@@ -33,6 +34,17 @@
                 <li class="list-group-item text-muted"><%= place.location%></li>
                 <li class="list-group-item">Submitted by <b><%= place?.author?.username || 'Unknown User'%></b></li>
                 <li class="list-group-item">suggested donation $<%= place.price%></li>
+<!--             place.mpAccessToken -->
+                <% if(place.mpAccessToken) { %>
+                <li class="list-group-item">
+                    <form action="/places/donate/<%=place._id%>" method="POST">
+                        <label for="donationAmount">Amount to donate:</label>
+                        <input type="number" id="donationAmount" name="donationAmount" value="<%= place.price %>">
+                        <button class="btn btn-success" id="donate-button">Donate</button>
+                        <div id="button-checkout"></div>
+                    </form>
+                </li>
+                <% } %>
             </ul>
             <%  if( currentUser && place?.author?.equals(currentUser._id))  {%>
             <div class="card-body">

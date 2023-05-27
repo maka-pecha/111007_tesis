@@ -33,7 +33,15 @@
                     </div>
                 </div>
             </div>
-
+            <div class="mb-3">
+                <label class="form-label" for="mpAccessToken">Access Token Mercado Pago</label>
+                <textarea class="form-control" type="text" id="mpAccessToken" name="place[mpAccessToken]"
+                          placeholder="If you want to receive donations you have to add this information"><%=place.mpAccessToken%>
+                </textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
                 <textarea class="form-control" type="text" id="description" name="place[description]"

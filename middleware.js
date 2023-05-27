@@ -14,7 +14,7 @@ module.exports.isLoggedIn = (req, res, next) => {
 }
 
 module.exports.validatePlace = (req, res, next) => {
-    const {error} = placeSchema.validate(req.body);
+    const { error } = placeSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
@@ -24,7 +24,7 @@ module.exports.validatePlace = (req, res, next) => {
 }
 
 module.exports.validateUser = (req, res, next) => {
-    const {error} = userSchema.validate(req.body);
+    const { error } = userSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
