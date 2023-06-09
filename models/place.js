@@ -46,7 +46,11 @@ const PlaceSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'Donation'
         }
-    ]
+    ],
+    subscribers: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 }, opts);
 
 

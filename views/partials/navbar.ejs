@@ -11,7 +11,7 @@
                 <a class="nav-link" href="/places">Places</a>
                 <a class="nav-link" href="/places/new">New Place</a>
                 <% if(currentUser) { %>
-                    <a class="nav-link" href="/chat/">Global Chat</a>
+                    <a class="nav-link" href="/chat/global">Global Chat</a>
                 <% } %>
             </div>
             <div class="navbar-nav ml-auto">
@@ -22,8 +22,9 @@
                     <% if (currentUser && currentUser.isAdmin) { %>
                     <a class="nav-link" href="/users">Users</a>
                     <a class="nav-link" href="/users/new">New User</a>
-                    <a class="nav-link" href="/donations">Donations</a>
+                    <a class="nav-link" href="/donations">All Donations</a>
                     <% } %>
+                        <a class="nav-link" href="/donations/user/<%=currentUser._id%>">My Donations</a>
                     <a class="nav-link" href="/users/<%=currentUser._id%>">
                         <p class="capitalize-text"><%=currentUser.username%></p>
                     </a>

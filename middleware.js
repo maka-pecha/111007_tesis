@@ -3,6 +3,7 @@ const PubNub = require('./chat/pubnubConfig');
 const ExpressError = require('./utils/ExpressError');
 const Place = require('./models/place');
 const Review = require('./models/review');
+const User = require('./models/user');
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -51,6 +52,49 @@ module.exports.isAuthor = async (req, res, next) => {
     next();
 }
 
+// This is a middleware function that checks if a user is the owner of a place.
+// If they are not the owner, they are redirected to a different route.
+module.exports.checkOwner = async (req, res, next) => {
+    let id_place = req.params.id_place.toString();
+    let user = req.user; // Assume you have authenticated user
+
+    Place.findById(id_place)
+        .then(place => {
+            if (place.author.toString() !== user._id.toString()) {
+                console.log("Redirected 1")
+                return res.redirect(`${id_place}/${user._id}`);
+            } else {
+                next();
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).send('Server Error');
+        });
+}
+
+module.exports.isUserOrOwner = async (req, res, next) => {
+    let id_place = req.params.id_place.toString();
+    let id = req.params.id.toString()
+    let user = req.user; // Assume you have authenticated user
+
+    Place.findById(id_place)
+        .then(place => {
+            if (place.author.toString() !== user._id.toString() && id !== user._id.toString()) {
+                console.log(place.author.toString())
+                console.log(id)
+                console.log("Redirected 2")
+
+                res.redirect(`/`);
+            } else {
+                next();
+            }
+        })
+        .catch(err => {
+            res.redirect(`/`);
+        });
+}
+
 module.exports.isReviewAuthor = async (req, res, next) => {
     const {id, reviewId} = req.params;
     const review = await Review.findById(reviewId);
@@ -81,10 +125,34 @@ module.exports.validateMessage = (req, res, next) => {
     }
 }
 
-module.exports.subscribeToChat = (req, res, next) => {
-    const PubNubInstance = PubNub.getInstance(req?.user?._id);
+module.exports.subscribeToPlaceChat = async (req, res, next) => {
+    const PubNubInstance = PubNub.getInstance(req.user._id);
+    const review = await Review.findById(reviewId);
+    let channel = [`users.${req.params.id_place.toString()}.*`]
 
-    let channel = [`users.${req.params.id}.${req.user._id}`]
+    try {
+        PubNubInstance.subscribe({
+            channels: channel,
+            withPresence: true, // Set to true if you want to receive presence events as well
+        });
+        console.log("Subscribed!")
+    } catch (error) {
+        console.log(error)
+    }
+    next();
+}
+
+module.exports.subscribeToChat = async (req, res, next) => {
+    const PubNubInstance = PubNub.getInstance(req.user._id);
+    const id_place = req.params.id_place.toString()
+    const id_user = req.user._id.toString()
+    let channel = [`users.${req.params.id_place.toString()}.${req.params.id.toString()}`]
+    const place = await Place.findById(id_place);
+    if(!place.subscribers.includes(id_user) && req.user._id.toString() !== place.author.toString()){
+        console.log("No esta subscrito")
+        place.subscribers.push(id_user)
+        place.save()
+    } else console.log("Esta subscrito")
 
     try {
         PubNubInstance.subscribe({
@@ -99,10 +167,8 @@ module.exports.subscribeToChat = (req, res, next) => {
 }
 
 module.exports.subscribeToPlaces = async (req, res, next) => {
-
     const PubNubInstance = PubNub.getInstance(req?.user?._id);
-
-    const places = await Place.find({author: req?.user?._id}, (err, places) => {
+    await Place.find({ author: req?.user?._id }, (err, places) => {
             if (err) {
                 console.error('Error executing query:', err);
                 return;

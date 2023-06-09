@@ -1,0 +1,37 @@
+<% layout('layouts/boilerplate')%>
+<div class="row">
+    <% if(users?.length) { %>
+    <h1 class="mt-4 mb-4">Chats with Users</h1>
+    <% users.forEach(user => { %>
+        <a href="<%= id_place %>/<%= user.id %>" class="text-decoration-none text-dark">
+            <div class="card mb-3" style="background: #343a400f">
+                <div class="row p-3 chat-column">
+                    <div class="col-md-1">
+                        <%if(user.image.length) {%>
+                        <img class="rounded-circle chat-image" alt="" src="<%=user.image[0].url%>">
+                        <% } else {%>
+                        <img class="rounded-circle chat-image" alt="" src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/DonateOnNetwork/2646025_glgbin.png">
+                        <% } %>
+                    </div>
+                    <div class="col-md-11">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= user.username %> </h5>
+                            <p class="card-text"><%= user.email %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    <% }); %>
+    <% } else { %>
+        <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+            <img src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1686285363/DonateOnNetwork/undraw_New_message_re_fp03_d8ojk8.png"
+                 class="d-block w-100" alt="">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text text-center">You don't have messages yet</p>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>

@@ -17,9 +17,9 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const app = express();
 const { createServer } = require('http');
-const { Server } = require('socket.io');
+const socketIo = require('socket.io');
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = socketIo(httpServer);
 const userRoutes = require('./routes/users');
 const placeRoutes = require('./routes/places');
 const reviewRoutes = require('./routes/reviews');
@@ -27,6 +27,24 @@ const authRoutes = require('./routes/auths');
 const chatRoutes = require('./routes/chat');
 const donationRoutes = require('./routes/donations');
 const printPDF = require('./utils/printPDF');
+
+io.on('connection', function(socket) {
+    console.log('A user connected');
+
+    socket.on('new message', function(msg) {
+        // Cuando se recibe un nuevo mensaje, se retransmite a todos los clientes
+        io.emit('new message', msg);
+    });
+
+    socket.on('disconnect', function() {
+        console.log('A user disconnected');
+    });
+});
+
+app.use(function(req, res, next){
+    req.io = io;
+    next();
+});
 
 const MongoDBStore = require("connect-mongo")(session);
 
@@ -48,19 +66,6 @@ db.once("open", () => {
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
-
-io.on('connection', function(socket) {
-    console.log('A user connected');
-
-    socket.on('new message', function(msg) {
-        // Cuando se recibe un nuevo mensaje, se retransmite a todos los clientes
-        io.emit('new message', msg);
-    });
-
-    socket.on('disconnect', function() {
-        console.log('A user disconnected');
-    });
-});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

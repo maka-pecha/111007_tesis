@@ -1,13 +1,13 @@
 <% layout('layouts/boilerplate')%>
-<div class="container">
+<div class="container ">
     <div class="row">
-        <h1 class="text-left">Global Chat</h1>
+        <h1 class="text-left"><%= place.title %></h1>
         <div class="col-md-8 chat-column" id="chat-column">
             <% messages.forEach(function(message, index) { %>
                 <div class="d-flex <%= message.user === currentUser.username ? 'self ' : '' %> align-items-start my-3 pb-2">
                     <div class="<%= message.user === currentUser.username ? 'ml-3' : 'mr-3' %>">
                         <% if(message?.image?.length) { %>
-                        <img class="rounded-circle chat-image" alt="" src="<%= message?.image[0]?.url %>">
+                            <img class="rounded-circle chat-image" alt="" src="<%= message?.image[0]?.url %>">
                         <% } else { %>
                             <img class="rounded-circle chat-image" alt=""
                                  src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1686251156/DonateOnNetwork/profile_jhphbc.png">
@@ -25,13 +25,15 @@
             <div id="messages"></div>
         </div>
         <div class="col-md-4">
-            <img src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1686257485/DonateOnNetwork/undraw_Chat_re_re1u_vwlfga.png" class="img-fluid rounded mb-2" alt="Chat Image">
-            <form id="form" action="/chat/global" method="POST" novalidate class="validated-form">
+            <img src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1686257485/DonateOnNetwork/undraw_Chat_re_re1u_vwlfga.png"
+                 class="img-fluid rounded mb-2" alt="Chat Image">
+            <form>
                 <div class="mb-3">
-                    <textarea class="form-control" id="message" name="message" rows="3" required placeholder="Type your message here"></textarea>
+                    <textarea class="form-control" id="message" name="message" rows="3"
+                              placeholder="Type your message here"></textarea>
                 </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-primary btn-block">Send message</button>
+                    <button type="button" id="button_msg" class="btn btn-primary btn-block">Send message</button>
                 </div>
             </form>
         </div>
@@ -45,27 +47,40 @@
     }
 
     window.onload = scrollFromBottom;
-
+    let url = `/chat/<%= id_place %>/<%= id %>`;
+    let channel = `users.<%= id_place %>.<%= id %>`
     const socket = io();
+
     const user = <%- JSON.stringify(currentUser) %>
 
-    document.getElementById('form').addEventListener('submit', function (e) {
-        const input = document.getElementById('message');
-        if(input.value !== '') {
+    document.getElementById('button_msg').addEventListener('click', function (e) {
+        console.log(channel)
+        const message = document.getElementById('message').value;
+        if(message !== '') {
             const date = new Date().toLocaleString();
             // Cuando se envía el formulario, emitimos el evento 'new message' con el valor de entrada
             const msg = {
                 user: user.username,
                 image: user.image,
-                message: input.value,
+                message: message,
                 date,
             }
-            socket.emit('new message', msg);
+            fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({message: message}) // body data type must match "Content-Type" header
+        })
+        document.getElementById('message').value = ""
+           socket.emit(channel, msg);
         }
     });
 
     // Cuando se recibe un nuevo mensaje, lo añadimos a la lista de mensajes
-    socket.on('new message', function(msg) {
+    socket.on(channel, function(msg) {
+        console.log("Socket")
         const item = document.createElement("div");
         item.id = 'new-message'
         item.classList.add('d-flex');
@@ -75,7 +90,7 @@
         if(msg.user === user.username) {
             item.classList.add('self');
         }
-        msg.image = msg.image ?? ['https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/DonateOnNetwork/2646025_glgbin.png'];
+        msg.image = msg.image ?? ['https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png'];
         item.innerHTML = `
                 <div class="mr-3">
                     <img class="rounded-circle chat-image" alt="" src="${msg?.image[0]?.url}">
@@ -91,5 +106,4 @@
         document.getElementById('messages').appendChild(item);
         scrollFromBottom();
     });
-    const messages = <%- JSON.stringify(messages) %>
 </script>
