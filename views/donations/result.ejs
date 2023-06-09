@@ -1,0 +1,30 @@
+<% layout('layouts/boilerplate') %>
+<div class="row">
+    <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+        <% if(result) { %>
+            <img src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1686256308/DonateOnNetwork/undraw_Super_thank_you_re_f8bo_pdl7o0.png" class="d-block w-100" alt="">
+        <% } else { %>
+            <img src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1686256308/DonateOnNetwork/undraw_Super_thank_you_re_f8bo_pdl7o0.png" class="d-block w-100" alt="">
+        <% } %>
+        <div class="card mb-3">
+            <div class="card-body">
+                <% if(result) { %>
+                    <h5 class="card-title">Thank You, <b class="capitalize-text"><%=currentUser.username%></b>!</h5>
+                    <p class="card-text">Your donation has been successfully processed. We are sincerely grateful for
+                        your generous contribution. Your support helps us continue our mission and serve our community.
+                        Thank you again!</p>
+                <% } else { %>
+                    <h5 class="card-title">Donation failed</h5>
+                    <p class="card-text">We're sorry, but we were unable to process your donation. Please check your
+                        payment information and try again. If the problem persists, please contact us for assistance. We
+                        appreciate your patience and understanding.</p>
+                <% } %>
+                <a href="/places/<%=place_id%>">Back To Place</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const result = <%- JSON.stringify(result) %>
+</script>
+

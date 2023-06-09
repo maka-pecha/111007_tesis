@@ -21,7 +21,4 @@ router.route('/:id')
 
 router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(places.renderEditForm))
 
-router.route('/donate/:id')
-    .post(isLoggedIn, catchAsync(places.donate))
-
 module.exports = router;

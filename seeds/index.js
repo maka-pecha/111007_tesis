@@ -44,8 +44,8 @@ const seedDB = async () => {
                     filename: 'DonateOnNetwork/3448561_ktdkmd'
                 },
                 {
-                    url: 'https://res.cloudinary.com/ddsxauxqi/image/upload/v1683582432/DonateOnNetwork/empathy_love_lzjl5j.jpg',
-                    filename: 'DonateOnNetwork/empathy_love_lzjl5j'
+                    url: 'https://res.cloudinary.com/ddsxauxqi/image/upload/v1684871047/DonateOnNetwork/empathy_love_hsgmtk.jpg',
+                    filename: 'DonateOnNetwork/empathy_love_hsgmtk'
                 }
             ]
         })

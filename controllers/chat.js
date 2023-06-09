@@ -3,15 +3,6 @@ const PubNub = require('../chat/pubnubConfig');
 const { getChat } = require('../utils/chat')
 const User = require('../models/user')
 
-module.exports.index = async (req, res) => {
-    const places = await Place.find({}).populate('popupText');
-    res.render('places/index', { places })
-}
-
-module.exports.renderNewForm = (req, res) => {
-    res.render('places/new');
-}
-
 module.exports.message = async (req, res) => {
     const pubnubInstance = PubNub.getInstance(req.user._id)
     const pageId = req.params.id

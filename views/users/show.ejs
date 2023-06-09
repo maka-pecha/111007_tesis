@@ -27,11 +27,13 @@
                 <p class="card-text"><%=user.email%></p>
             </div>
             <div class="card-body">
-                <a class="card-link btn btn-info" href="/users/<%=user._id%>/edit">Edit</a>
-                <% if(currentUser && currentUser.isAdmin) { %>
-                <form class="d-inline" action="/users/<%=user._id%>?_method=DELETE" method="POST">
-                    <button class="btn btn-danger">Delete</button>
-                </form>
+                <% if(currentUser) { %>
+                    <a class="card-link btn btn-info" href="/users/<%= user._id %>/edit">Edit</a>
+                    <% if(currentUser.isAdmin) { %>
+                        <form class="d-inline" action="/users/<%= user._id %>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    <% } %>
                 <% } %>
             </div>
             <div class="card-footer text-muted">

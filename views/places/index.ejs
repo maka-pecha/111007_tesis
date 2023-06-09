@@ -2,14 +2,13 @@
 <div id="cluster-map"></div>
 <div class="container">
     <h1>All Places</h1>
-
     <% for (let place of places){%>
-    <div class="card mb-3">
-        <div class="row">
+    <div class="card mb-3" style="background: #343a400f">
+        <div class="row chat-column">
             <div class="col-md-4 image-container">
                 <%if(place.images.length) {%>
                 <img class="img-fluid" alt="" src="<%=place.images[0].url%>">
-                <% }else {%>
+                <% } else {%>
                 <img class="img-fluid" alt=""
                     src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683583556/DonateOnNetwork/3448561_ktdkmd.png">
                 <% } %>
@@ -23,6 +22,9 @@
                         <small class="text-muted"><%= place.location%></small>
                     </p>
                     <a class="btn btn-primary" href="/places/<%=place._id%>">View <%=place.title%></a>
+                    <% if(currentUser.isAdmin) {%>
+                    <a class="btn btn-success" href="/donations/place/<%=place._id%>">Donations</a>
+                    <% } %>
                 </div>
             </div>
         </div>

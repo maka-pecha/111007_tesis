@@ -20,8 +20,8 @@ module.exports.createPreference = async (req) => {
             }
         ],
         back_urls: {
-            "success": `http://${host}/places/${place._id}`,
-            "failure": `http://${host}/places/${place._id}`,
+            "success": `http://${host}/donations/${place._id}/result/${donationAmount}`,
+            "failure": `http://${host}/donations/${place._id}/result/fail`,
             "pending": `http://${host}/places/${place._id}`
         },
         auto_return: "approved",
@@ -37,16 +37,3 @@ module.exports.createPreference = async (req) => {
 
     return preferenceId;
 }
-
-//
-// app.get('/feedback', function (req, res) {
-//     res.json({
-//         Payment: req.query.payment_id,
-//         Status: req.query.status,
-//         MerchantOrder: req.query.merchant_order_id
-//     });
-// });
-//
-// app.listen(8080, () => {
-//     console.log("The server is now running on Port 8080");
-// });

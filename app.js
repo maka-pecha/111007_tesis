@@ -25,6 +25,8 @@ const placeRoutes = require('./routes/places');
 const reviewRoutes = require('./routes/reviews');
 const authRoutes = require('./routes/auths');
 const chatRoutes = require('./routes/chat');
+const donationRoutes = require('./routes/donations');
+const printPDF = require('./utils/printPDF');
 
 const MongoDBStore = require("connect-mongo")(session);
 
@@ -164,6 +166,7 @@ app.use('/', authRoutes);
 app.use('/users', userRoutes);
 app.use('/places', placeRoutes)
 app.use('/places/:id/reviews', reviewRoutes)
+app.use('/donations', donationRoutes)
 app.use('/chat', chatRoutes)
 app.use(express.static(path.join(__dirname, 'node_modules/socket.io/client-dist')));
 
@@ -171,6 +174,11 @@ app.get('/', (req, res) => {
     res.render('home')
 });
 
+app.get('/generatePDF/:path', async (req, res) => {
+    const pdf = await printPDF(req);
+    res.set({ 'Content-Type': 'application/pdf', 'Content-Length': pdf.length });
+    res.send(pdf);
+});
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404))

@@ -82,7 +82,7 @@ module.exports.validateMessage = (req, res, next) => {
 }
 
 module.exports.subscribeToChat = (req, res, next) => {
-    const PubNubInstance = PubNub.getInstance(req.user._id);
+    const PubNubInstance = PubNub.getInstance(req?.user?._id);
 
     let channel = [`users.${req.params.id}.${req.user._id}`]
 
@@ -100,9 +100,9 @@ module.exports.subscribeToChat = (req, res, next) => {
 
 module.exports.subscribeToPlaces = async (req, res, next) => {
 
-    const PubNubInstance = PubNub.getInstance(req.user._id);
+    const PubNubInstance = PubNub.getInstance(req?.user?._id);
 
-    const places = await Place.find({author: req.user._id}, (err, places) => {
+    const places = await Place.find({author: req?.user?._id}, (err, places) => {
             if (err) {
                 console.error('Error executing query:', err);
                 return;

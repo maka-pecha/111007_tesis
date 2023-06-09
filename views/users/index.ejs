@@ -1,24 +1,31 @@
 <% layout('layouts/boilerplate')%>
 <div class="container">
-    <h1>All Users</h1>
-
+    <div class="row align-items-center">
+        <div class="col-md-9">
+            <h1>All Users</h1>
+        </div>
+        <div class="col-md-3">
+            <img src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1686258144/DonateOnNetwork/undraw_People_re_8spw_enlzxn.png"
+                 class="img-fluid mx-auto rounded-circle" alt="Chat Image">
+        </div>
+    </div>
     <% for (let user of users){%>
-    <div class="card mb-3">
-        <div class="row">
+    <div class="card mb-3" style="background: #343a400f">
+        <div class="row p-3 chat-column">
             <div class="col-md-4 image-container">
                 <%if(user.image.length) {%>
                 <img class="img-fluid" alt="" src="<%=user.image[0].url%>">
                 <% } else {%>
                 <img class="img-fluid" alt=""
-                    src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png">
+                    src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/DonateOnNetwork/2646025_glgbin.png">
                 <% } %>
             </div>
             <div class="col-md-8">
                 <div class="card-body">
                     <h5 class="card-title"><%= user.username %> </h5>
-
                     <p class="card-text"><%= user.email %></p>
-                    <a class="btn btn-primary" href="/users/<%=user._id%>">View <%=user.title%></a>
+                    <a class="btn btn-primary" href="/users/<%=user._id%>">View</a>
+                    <a class="btn btn-success" href="/donations/user/<%=user._id%>">Donations</a>
                 </div>
             </div>
         </div>

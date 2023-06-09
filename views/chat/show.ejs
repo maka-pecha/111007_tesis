@@ -7,9 +7,9 @@
             <div class="d-flex <%= message.user === currentUser.username ? 'self ' : '' %> align-items-start my-3 pb-2">
                 <div class="<%= message.user === currentUser.username ? 'ml-3' : 'mr-3' %>">
                     <%if(message?.image?.length) {%>
-                    <img class="rounded-circle chat-image" alt="" src="<%=message?.image[0]?.url%>">
+                        <img class="rounded-circle chat-image" alt="" src="<%=message?.image[0]?.url%>">
                     <% } else {%>
-                        <img class="rounded-circle chat-image" alt="" src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png">
+                        <img class="rounded-circle chat-image" alt="" src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1686251156/DonateOnNetwork/profile_jhphbc.png">
                     <% } %>
                 </div>
                 <div class="flex-grow-1 <%= message.user === currentUser.username ? 'chat-message-self' : 'chat-message' %>">
@@ -24,9 +24,9 @@
             <div id="messages"></div>
         </div>
         <div class="col-md-4">
+            <img src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1686257485/DonateOnNetwork/undraw_Chat_re_re1u_vwlfga.png" class="img-fluid rounded mb-2" alt="Chat Image">
             <form id="form" action="/chat/" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
-                    <label for="message" class="form-label">Your message</label>
                     <textarea class="form-control" id="message" name="message" rows="3" required placeholder="Type your message here"></textarea>
                 </div>
                 <div class="mb-3">
@@ -74,7 +74,7 @@
         if(msg.user === user.username) {
             item.classList.add('self');
         }
-        msg.image = msg.image ?? ['https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/2646025_glgbin.png'];
+        msg.image = msg.image ?? ['https://res.cloudinary.com/ddsxauxqi/image/upload/v1683580224/DonateOnNetwork/2646025_glgbin.png'];
         item.innerHTML = `
                 <div class="mr-3">
                     <img class="rounded-circle chat-image" alt="" src="${msg?.image[0]?.url}">
