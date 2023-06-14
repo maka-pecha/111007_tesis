@@ -24,6 +24,7 @@ const userRoutes = require('./routes/users');
 const placeRoutes = require('./routes/places');
 const reviewRoutes = require('./routes/reviews');
 const authRoutes = require('./routes/auths');
+const landingRoutes = require('./routes/landings');
 const chatRoutes = require('./routes/chat');
 const donationRoutes = require('./routes/donations');
 const printPDF = require('./utils/printPDF');
@@ -168,6 +169,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/', authRoutes);
+app.use('/', landingRoutes);
 app.use('/users', userRoutes);
 app.use('/places', placeRoutes)
 app.use('/places/:id/reviews', reviewRoutes)
