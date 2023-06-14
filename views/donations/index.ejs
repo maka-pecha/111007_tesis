@@ -27,32 +27,43 @@
             </div>
         </div>
     <% } %>
-    <% if (donations.length > 0) { %>
-        <div class="row mb-4">
-            <% if (user) { %>
-                <div class="col-md-8">
-                    <p class="card-text"> The total donated by <b><%= user.username %></b> is <b>$<%= user.totalPrice %></b> </p>
-                </div>
-                <div class="col-md-4 d-flex justify-content-end align-items-center">
-                    <a id="generate-pdf" class="btn btn-secondary" target="_blank" href="/generatePDF/donations-user-<%= user._id %>">Generate PDF</a>
-                </div>
-            <% } else if (place) { %>
-                <div class="col-md-8">
-                    <p class="card-text"> The total donated to <b><%= place.title %></b> is <b>$<%= place.totalPrice %></b> </p>
-                </div>
-                <div class="col-md-4 d-flex justify-content-end align-items-center">
-                    <a id="generate-pdf" class="btn btn-secondary" target="_blank" href="/generatePDF/donations-place-<%= place._id %>">Generate PDF</a>
-                </div>
-            <% } else { %>
-                <div class="col-md-8">
-                    <p class="card-text"> The total donated is <b>$<%= donations.totalPrice %></b> </p>
-                </div>
-                <div class="col-md-4 d-flex justify-content-end align-items-center">
-                    <a id="generate-pdf" class="btn btn-secondary" target="_blank" href="/generatePDF/donations">Generate PDF</a>
-                </div>
-            <% } %>
-        </div>
-    <% } %>
+        <% if (donations.length > 0) { %>
+            <div class="row mb-4">
+                <% if (user) { %>
+                    <div class="col-md-8">
+                        <p class="card-text">
+                            The total donated by <strong><%= user.username %></strong> is
+                            <span class="border border-dark rounded p-2 h4"><strong>$<%= user.totalPrice %></strong></span>
+                            ARS&nbsp;<span title="Argentine pesos" style="color: #5da8ea;">&#9432;</span>
+                        </p>
+                    </div>
+                    <div class="col-md-4 d-flex justify-content-end align-items-center">
+                        <a id="generate-pdf" class="btn btn-secondary" target="_blank" href="/generatePDF/donations-user-<%= user._id %>">Generate PDF</a>
+                    </div>
+                <% } else if (place) { %>
+                    <div class="col-md-8">
+                        <p class="card-text">
+                            The total donated to <strong><%= place.title %></strong> is
+                            <span class="border border-dark rounded p-2 h4"><strong>$<%= place.totalPrice %></strong></span>
+                            ARS&nbsp;<span title="Argentine pesos" style="color: #5da8ea;">&#9432;</span>
+                        </p>
+                    </div>
+                    <div class="col-md-4 d-flex justify-content-end align-items-center">
+                        <a id="generate-pdf" class="btn btn-secondary" target="_blank" href="/generatePDF/donations-place-<%= place._id %>">Generate PDF</a>
+                    </div>
+                <% } else { %>
+                    <div class="col-md-8">
+                        <p class="card-text">
+                            The total donated is <span class="border border-dark rounded p-2 h4"><strong>$<%= donations.totalPrice %></strong></span>
+                            ARS&nbsp;<span title="Argentine pesos" style="color: #5da8ea;">&#9432;</span>
+                        </p>
+                    </div>
+                    <div class="col-md-4 d-flex justify-content-end align-items-center">
+                        <a id="generate-pdf" class="btn btn-secondary" target="_blank" href="/generatePDF/donations">Generate PDF</a>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
     <% for (let donation of donations){ %>
         <div class="card mb-3" style="background: #343a400f; break-inside: avoid">
             <div class="row p-3 chat-column">
