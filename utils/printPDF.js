@@ -16,6 +16,9 @@ module.exports =  async function (req) {
     await page.evaluate(() => {
         const buttonGeneratePDF = document.getElementById('generate-pdf');
         buttonGeneratePDF.remove();
+        const TyCandFAQ = document.getElementById('TyCandFAQ');
+        TyCandFAQ.remove();
+
         const imagesUsers = Array.from(document.getElementsByClassName('images-users'));
         imagesUsers.forEach(image => {
             image.remove();

@@ -37,7 +37,7 @@
 <!--             place.mpAccessToken -->
                 <% if(place.mpAccessToken) { %>
                 <li class="list-group-item">
-                    <form action="/donations/<%=place._id%>" method="POST">
+                    <form action="/donations/place/<%=place._id%>" method="POST">
                         <label for="donationAmount">Amount to donate:</label>
                         <input type="number" id="donationAmount" name="donationAmount" value="<%= place.price %>">
                         <button class="btn btn-success" id="donate-button">Donate</button>

@@ -2,7 +2,6 @@ const Place = require("../models/place");
 const User = require("../models/user");
 const mercadopago = require("../mercadoPago");
 const Donation = require("../models/donation");
-const puppeteer = require('puppeteer');
 
 module.exports.index = async (req, res) => {
     let donations = await Donation.find({}).populate('donor').populate('place');
@@ -66,3 +65,55 @@ module.exports.renderResult = async (req, res) => {
         res.redirect(`/places/${place._id}`)
     }
 }
+
+module.exports.getGraphics = async (req, res) => {
+    const places = await Place.find().populate('donations');
+    const result = { places: [], donations: [] };
+
+    for (let place of places) {
+        let totalDonations = 0;
+
+        totalDonations = place.donations.reduce((accumulator, donation) => accumulator + donation.price, 0);
+
+        if(totalDonations !== 0) {
+            result.places.push(place.title);
+            result.donations.push(totalDonations);
+        }
+    }
+    res.render('donations/graphics', { result })
+}
+
+module.exports.getGraphicsPerDate = async (req, res) => {
+    const { startDate, endDate } = req.body;
+    if(!startDate || !endDate) {
+        req.flash('error', 'Temporally, cannot donate to this place');
+    }
+
+    // Convertir las fechas a objetos Date de JavaScript
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Incrementar en un día la fecha final para incluir el día completo.
+    end.setDate(end.getDate() + 1);
+
+    // Buscar lugares con las donaciones entre las fechas proporcionadas
+    let places = await Place.find().populate({
+        path: 'donations',
+        match: { date: { $gte: start, $lt: end } },
+    });
+    places = places.filter(place => place.donations.length > 0);
+    const result = { places: [], donations: [], date: { startDate, endDate } };
+
+    for (let place of places) {
+        let totalDonations = 0;
+
+        totalDonations = place.donations.reduce((accumulator, donation) => accumulator + donation.price, 0);
+
+        if(totalDonations !== 0) {
+            result.places.push(place.title);
+            result.donations.push(totalDonations);
+        }
+    }
+
+    res.render(`donations/graphics`, { result });
+};

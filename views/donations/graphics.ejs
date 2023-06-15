@@ -1,0 +1,88 @@
+<% layout('layouts/boilerplate')%>
+<!-- Aquí es donde añades el canvas -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Total Donations per Place</h1>
+            <form action="/donations/graphics" method="POST" class="mt-5">
+                <div class="form-group row">
+                    <label for="startDate" class="col-sm-2 col-form-label">Start Date:</label>
+                    <div class="col-sm-4">
+                        <input type="date" id="startDate" name="startDate" class="form-control" value="<%= result?.date?.startDate%>" required>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="endDate" class="col-sm-2 col-form-label">End Date:</label>
+                    <div class="col-sm-4">
+                        <input type="date" id="endDate" name="endDate" class="form-control" value="<%= result?.date?.endDate%>" required>
+                    </div>
+                </div>
+
+                <div class="form-group row mt-4">
+                    <div class="col-sm-10">
+                        <button class="btn btn-info" type="submit">Search</button>
+                        <a href="/donations/graphics" class="btn btn-secondary">Restore</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-6 text-right">
+            <img src="https://res.cloudinary.com/ddsxauxqi/image/upload/v1686785724/DonateOnNetwork/undraw_visual_data_re_mxxo_rb3qb4.png" class="img-fluid rounded" alt="Graphics Image" style="width: 60%; height: auto;">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <% if(result.places.length > 0) { %>
+                <canvas id="myChart"></canvas>
+            <% } else { %>
+                <div class="card mb-3">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Not Found</h5>
+                        <p class="card-text">There are not donations in this period</p>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<!-- Asegúrate de añadir Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Y tu script personalizado aquí -->
+<script>
+    const result = <%- JSON.stringify(result) %>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: result.places,
+            datasets: [{
+                label: 'Total Donations ($)',
+                data: result.donations,
+                backgroundColor: '#E7465D', // Color de fondo de las barras
+                borderColor: '#E7465D', // Color del borde de las barras
+                borderWidth: 1 // Ancho del borde de las barras
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true, // Muestra la leyenda
+                    labels: {
+                        color: 'black' // Cambia el color de la leyenda
+                    }
+                }
+            },
+            responsive: true, // Hace que el gráfico sea responsive
+        }
+    });
+</script>
