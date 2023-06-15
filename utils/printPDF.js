@@ -18,7 +18,6 @@ module.exports =  async function (req) {
         buttonGeneratePDF.remove();
         const TyCandFAQ = document.getElementById('TyCandFAQ');
         TyCandFAQ.remove();
-
         const imagesUsers = Array.from(document.getElementsByClassName('images-users'));
         imagesUsers.forEach(image => {
             image.remove();
