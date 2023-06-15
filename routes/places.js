@@ -9,10 +9,11 @@ const upload = multer({ storage });
 
 router.route('/')
     .get(subscribeToPlaces,catchAsync(places.index))
+    .post(isLoggedIn, upload.array('image'), catchAsync(places.indexSearch))
+
+router.route('/new')
+    .get(isLoggedIn, places.renderNewForm)
     .post(isLoggedIn, upload.array('image'), validatePlace, catchAsync(places.createPlace))
-
-
-router.get('/new', isLoggedIn, places.renderNewForm)
 
 router.route('/:id')
     .get(catchAsync(places.showPlace))

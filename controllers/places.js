@@ -10,6 +10,23 @@ module.exports.index = async (req, res) => {
     res.render('places/index', { places })
 }
 
+module.exports.indexSearch = async (req, res) => {
+    const { name } = req.body;  // O asume que 'title' es el nombre
+    let places = [];
+    if(name){
+        places = await Place.find({
+            $or: [
+                {title: {$regex: name, $options: 'i'}},
+                {description: {$regex: name, $options: 'i'}},
+                {location: {$regex: name, $options: 'i'}}
+            ]
+        });
+    } else {
+        places = await Place.find({}).populate('popupText');
+    }
+    res.render('places/index', { places });
+}
+
 module.exports.renderNewForm = (req, res) => {
     res.render('places/new');
 }

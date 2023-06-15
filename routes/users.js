@@ -9,9 +9,11 @@ const upload = multer({ storage });
 
 router.route('/')
     .get(isLoggedIn, isAdmin, catchAsync(users.index))
-    .post(isLoggedIn, upload.array('image'), validateUser, catchAsync(users.createUser))
+    .post(isLoggedIn, upload.array('image'), catchAsync(users.indexSearch))
 
-router.get('/new', isLoggedIn, users.renderNewForm)
+router.route('/new')
+    .get(isLoggedIn, users.renderNewForm)
+    .post(isLoggedIn, upload.array('image'), validateUser, catchAsync(users.createUser))
 
 router.route('/:id')
     .get(catchAsync(users.showUser))

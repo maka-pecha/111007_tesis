@@ -1,7 +1,20 @@
 <% layout('layouts/boilerplate')%>
 <div id="cluster-map"></div>
 <div class="container">
-    <h1>All Places</h1>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <h1>All Places</h1>
+            </div>
+            <div class="col-md-6">
+                <form action="/places" method="POST" class="d-flex justify-content-end">
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Search" required>
+                    <button class="btn btn-info ml-2" type="submit">Search</button>
+                    <a href="/places" class="btn btn-secondary ml-2">Restore</a>
+                </form>
+            </div>
+        </div>
+    </div>
     <% for (let place of places){%>
     <div class="card mb-3" style="background: #343a400f">
         <div class="row chat-column">
@@ -31,6 +44,14 @@
         </div>
     </div>
     <% }%>
+    <% if (places.length < 1){%>
+        <div class="card mb-3">
+            <div class="card-body text-center">
+                <h5 class="card-title">Not Found</h5>
+                <p class="card-text">There are not places for this search</p>
+            </div>
+        </div>
+    <% } %>
 </div>
 <script>
     const mapToken = '<%-process.env.MAPBOX_TOKEN%>';

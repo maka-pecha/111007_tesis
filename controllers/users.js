@@ -9,6 +9,22 @@ module.exports.index = async (req, res) => {
     res.render('users/index', { users })
 }
 
+module.exports.indexSearch = async (req, res) => {
+    const { name } = req.body;  // O asume que 'title' es el nombre
+    let users = [];
+    if(name){
+        users = await User.find({
+            $or: [
+                {username: {$regex: name, $options: 'i'}},
+                {email: {$regex: name, $options: 'i'}},
+            ]
+        });
+    } else {
+        users = await User.find({}).populate('popupText');
+    }
+    res.render('users/index', { users })
+}
+
 module.exports.renderNewForm = (req, res) => {
     res.render('users/new');
 }
