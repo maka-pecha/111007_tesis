@@ -31,9 +31,7 @@ module.exports.message = async (req, res) => {
 }
 
 module.exports.showGlobalChat = async (req, res) => {
-    const pubnubInstance = PubNub.getInstance(req.user._id);
-    const subscribedChannels = pubnubInstance.getSubscribedChannels();
-    const id = subscribedChannels[subscribedChannels.length -1 ].split('.')[1];
+    const pubnubInstance = PubNub.getInstance(req.user._id.toString());
     const chats = await getChat(pubnubInstance,'user')
     const messages = []
     if (chats) {
@@ -47,7 +45,7 @@ module.exports.showGlobalChat = async (req, res) => {
             messages.push({ user: username, image, message, date })
         }
     }
-    res.render('chat/show',{ id, messages });
+    res.render('chat/show',{ messages });
 }
 
 module.exports.showChat = async (req, res) => {
