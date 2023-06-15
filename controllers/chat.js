@@ -5,9 +5,7 @@ const User = require('../models/user')
 
 module.exports.message = async (req, res) => {
     const pubnubInstance = PubNub.getInstance(req.user._id)
-
     // Event handler for PubNub message
-
     const channel = "user"
     let msg = req.body.message
     try {
@@ -15,16 +13,12 @@ module.exports.message = async (req, res) => {
             channels: [channel],
             withPresence: true, // Set to true if you want to receive presence events as well
           });
-          console.log("Subscribed!")
     } catch (error) {
-        console.log(error)
+        req.flash('error', 'Message can´t be send');
+        res.status(400).send();
     }
 
-    const subscribedChannels = pubnubInstance.getSubscribedChannels();
-
-    console.log(req.body.message)
-    console.log(subscribedChannels)
-
+    pubnubInstance.getSubscribedChannels();
     const publishPayload = {
         channel : channel,
         message: {
@@ -78,7 +72,6 @@ module.exports.showChat = async (req, res) => {
             messages.push({ user: username, image, message, date })
         }
     }
-    console.log(messages)
     res.render('chat/private_chat',{ id, messages, id_place, place });
 }
 
@@ -86,19 +79,15 @@ module.exports.showPlaceChats = async (req, res) => {
     const id_place = req.params.id_place.toString()
     const place = await Place.findById(id_place)
     const subs = place.subscribers || [];
-    console.log(place)
     const users = []
 
     for(let sub of subs){
         users.push(await User.findById(sub))
     }
-
-    console.log('subs',subs)
-    console.log('users',users)
     res.render('chat/index',{ users, id_place });
 }
 
-module.exports.getMes = async (req, res, next) => {
+module.exports.getMes = async (req, res) => {
     const user = req.user
     const id_place = req.params.id_place.toString()
     const id = req.params.id.toString()
@@ -113,26 +102,17 @@ module.exports.getMes = async (req, res, next) => {
         const message = chat.message.description
         messages.push({user:username,message:message})
     }
-    console.log(messages)
     const data = { id:id,messages:messages, pubnubInstance:pubnubInstance }
     res.json(JSON.stringify(data));
 }
 
-module.exports.testPost = async (req, res, next) => {
+module.exports.testPost = async (req, res) => {
     const user = req.user
     const id_place = req.params.id_place.toString()
     const id = req.params.id.toString()
     const pubnubInstance = PubNub.getInstance(req.user._id)
-
-    let msg = req.body.message
-
+    const msg = req.body.message
     const channel = `users.${id_place}.${id}`
-
-    console.log(`user : ${user}
-    id_place : ${id_place}
-    id : ${id}
-    mensaje : ${msg}
-    channel : ${channel}`)
 
     const publishPayload = {
         channel : channel,
@@ -142,9 +122,7 @@ module.exports.testPost = async (req, res, next) => {
         }
     };
 
-    const status = await pubnubInstance.publish(publishPayload);
-    console.log(status)
-    console.log(req.io)
+    await pubnubInstance.publish(publishPayload);
     const date = new Date().toLocaleString();
     req.io.emit(channel,{
         user: user.username,

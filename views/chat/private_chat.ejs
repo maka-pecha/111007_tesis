@@ -80,7 +80,6 @@
 
     // Cuando se recibe un nuevo mensaje, lo añadimos a la lista de mensajes
     socket.on(channel, function(msg) {
-        console.log("Socket")
         const item = document.createElement("div");
         item.id = 'new-message'
         item.classList.add('d-flex');

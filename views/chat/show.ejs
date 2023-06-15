@@ -31,7 +31,7 @@
                     <textarea class="form-control" id="message" name="message" rows="3" required placeholder="Type your message here"></textarea>
                 </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-primary btn-block">Send message</button>
+                    <button type="button" id="button_msg" class="btn btn-primary btn-block">Send message</button>
                 </div>
             </form>
         </div>
@@ -47,19 +47,27 @@
     window.onload = scrollFromBottom;
 
     const socket = io();
-    const user = <%- JSON.stringify(currentUser) %>
+    const user = <%- JSON.stringify(currentUser) %>;
+    const url = '/chat/global';
 
-    document.getElementById('form').addEventListener('submit', function (e) {
-        const input = document.getElementById('message');
-        if(input.value !== '') {
+    document.getElementById('button_msg').addEventListener('click', function (e) {
+        const message = document.getElementById('message').value;
+        if(message !== '') {
             const date = new Date().toLocaleString();
-            // Cuando se envía el formulario, emitimos el evento 'new message' con el valor de entrada
             const msg = {
                 user: user.username,
                 image: user.image,
-                message: input.value,
+                message,
                 date,
             }
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message })
+            })
+            document.getElementById('message').value = ""
             socket.emit('new message', msg);
         }
     });

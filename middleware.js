@@ -148,11 +148,10 @@ module.exports.subscribeToChat = async (req, res, next) => {
     const id_user = req.user._id.toString()
     let channel = [`users.${req.params.id_place.toString()}.${req.params.id.toString()}`]
     const place = await Place.findById(id_place);
-    if(!place.subscribers.includes(id_user) && req.user._id.toString() !== place.author.toString()){
-        console.log("No esta subscrito")
+    if (!place.subscribers.includes(id_user) && req.user._id.toString() !== place.author.toString()){
         place.subscribers.push(id_user)
         place.save()
-    } else console.log("Esta subscrito")
+    }
 
     try {
         PubNubInstance.subscribe({

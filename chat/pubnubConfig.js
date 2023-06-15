@@ -34,33 +34,3 @@ class PubNubInstancePool {
 }
 
 module.exports = new PubNubInstancePool();
-
-
-
-
-
-
-
-// const PubNub = require('pubnub');
-
-// let pubnubInstance;
-
-// function initializePubNub(userId) {
-//   if (!pubnubInstance) {
-//     const pubnub = new PubNub({
-//       publishKey: process.env.PUBNUB_PUBLISH_KEY,
-//       subscribeKey: process.env.PUBNUB_SUBSCRIBE_KEY,
-//       userId: userId.toString(), // Set the user ID as the UUID
-//     });
-
-//     pubnubInstance = pubnub
-//   }
-
-// }
-
-// function getPubnub(){
-
-//   return pubnubInstance;
-// }
-
-// module.exports = {initializePubNub,getPubnub};

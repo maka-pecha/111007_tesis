@@ -212,7 +212,6 @@ module.exports.renderVerify = async (req, res) => {
         await user.save();
         verify = true;
     }
-    console.log('user ', verify);
     res.render('users/verify', { verify });
 }
 
