@@ -4,28 +4,44 @@ const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 const { cloudinary } = require("../cloudinary");
+const User = require("../models/user");
 
 module.exports.index = async (req, res) => {
     const places = await Place.find({}).populate('popupText');
-    res.render('places/index', { places })
+    res.render('places/index', { places, author: null })
+}
+
+module.exports.indexByAuthor = async (req, res) => {
+    const { id } = req.params;
+    const authorId = id || req.user._id;  // Suponiendo que el ID del autor está almacenado en req.user._id
+    const author = await User.findById(authorId);
+    const places = await Place.find({ author: authorId }).populate('popupText');
+    res.render('places/index', { places, author });
 }
 
 module.exports.indexSearch = async (req, res) => {
-    const { name } = req.body;  // O asume que 'title' es el nombre
-    let places = [];
-    if(name){
-        places = await Place.find({
-            $or: [
-                {title: {$regex: name, $options: 'i'}},
-                {description: {$regex: name, $options: 'i'}},
-                {location: {$regex: name, $options: 'i'}}
-            ]
-        });
-    } else {
-        places = await Place.find({}).populate('popupText');
+    const { name, authorId } = req.body;
+    let author = null;
+    if (authorId) {
+        author = await User.findById(authorId);
     }
-    res.render('places/index', { places });
+    let query = {};
+
+    if (name) {
+        query.$or = [
+            { title: { $regex: name, $options: 'i' } },
+            { description: { $regex: name, $options: 'i' } },
+            { location: { $regex: name, $options: 'i' } }
+        ];
+    }
+    if (author) {
+        query.author = authorId;
+    }
+
+    const places = await Place.find(query).populate('popupText');
+    res.render('places/index', { places, author });
 }
+
 
 module.exports.renderNewForm = (req, res) => {
     res.render('places/new');

@@ -4,14 +4,28 @@
     <div class="container">
         <div class="row mt-5">
             <div class="col-md-6">
+                <% if(author) {%>
+                <h1 class="capitalize-text"><%=author.username %> Places</h1>
+                <% } else { %>
                 <h1>All Places</h1>
+                <% } %>
             </div>
             <div class="col-md-6">
-                <form action="/places" method="POST" class="d-flex justify-content-end">
-                    <input type="text" id="name" name="name" class="form-control" placeholder="Search" required>
-                    <button class="btn btn-info ml-2" type="submit">Search</button>
-                    <a href="/places" class="btn btn-secondary ml-2">Restore</a>
-                </form>
+                <% if (author) { %>
+                        <form action="/places/user/<%=author.id%>" method="POST" class="d-flex justify-content-end">
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Search" required>
+                            <input type="hidden" id="authorId" name="authorId" value="<%=author.id%>">
+                            <button class="btn btn-info ml-2" type="submit">Search</button>
+                            <a href="/places/user/<%=author.id%>" class="btn btn-secondary ml-2">Restore</a>
+                        </form>
+                <% } else { %>
+                    <form action="/places" method="POST" class="d-flex justify-content-end">
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Search" required>
+                        <input type="hidden" id="authorId" name="authorId" value="<%=null%>">
+                        <button class="btn btn-info ml-2" type="submit">Search</button>
+                        <a href="/places" class="btn btn-secondary ml-2">Restore</a>
+                    </form>
+                <% } %>
             </div>
         </div>
     </div>

@@ -11,6 +11,14 @@ router.route('/')
     .get(subscribeToPlaces,catchAsync(places.index))
     .post(isLoggedIn, upload.array('image'), catchAsync(places.indexSearch))
 
+router.route('/user/:id')
+    .get(subscribeToPlaces,catchAsync(places.indexByAuthor))
+    .post(isLoggedIn, upload.array('image'), catchAsync(places.indexSearch))
+
+// router.route('/my-places')
+//     .get(subscribeToPlaces,catchAsync(places.indexByAuthor))
+//     .post(isLoggedIn, upload.array('image'), catchAsync(places.indexSearch))
+
 router.route('/new')
     .get(isLoggedIn, places.renderNewForm)
     .post(isLoggedIn, upload.array('image'), validatePlace, catchAsync(places.createPlace))
