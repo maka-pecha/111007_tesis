@@ -43,13 +43,25 @@ module.exports.isAdmin = (req, res, next) => {
 }
 
 module.exports.isAuthor = async (req, res, next) => {
-    const {id} = req.params;
+    const { id } = req.params;
     const place = await Place.findById(id);
     if (!place.author.equals(req.user._id)) {
         req.flash('error', 'You do not have permission to do that!');
         return res.redirect(`/places/${id}`);
     }
     next();
+}
+
+module.exports.isAuthorOrAdmin = async (req, res, next) => {
+    const { id } = req.params;
+    const place = await Place.findById(id);
+
+    if (req.user.isAdmin || place.author.equals(req.user._id)) {
+        return next();
+    }
+
+    req.flash('error', 'You do not have permission to do that!');
+    return res.redirect(`/places/${id}`);
 }
 
 // This is a middleware function that checks if a user is the owner of a place.

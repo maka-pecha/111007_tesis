@@ -55,7 +55,7 @@
                     </li>
                     <% } %>
                 </ul>
-                <% if( currentUser && place?.author?.equals(currentUser._id))  { %>
+                <% if( currentUser && (place?.author?.equals(currentUser._id) || currentUser.isAdmin))  { %>
                 <div class="card-body">
                     <a class="card-link btn btn-info" href="/places/<%= place._id %>/edit">Edit</a>
                     <form class="d-inline" action="/places/<%= place._id %>?_method=DELETE" method="POST">

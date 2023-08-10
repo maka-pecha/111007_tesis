@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const places = require('../controllers/places');
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, isAuthor, validatePlace, subscribeToPlaces } = require('../middleware');
+const { isLoggedIn, isAuthor, isAuthorOrAdmin, validatePlace, subscribeToPlaces, isAdmin} = require('../middleware');
 const multer = require('multer');
 const { storage } = require('../cloudinary');
 const upload = multer({ storage });
@@ -18,8 +18,8 @@ router.route('/new')
 router.route('/:id')
     .get(catchAsync(places.showPlace))
     .put(isLoggedIn, isAuthor, upload.array('image'), validatePlace, catchAsync(places.updatePlace))
-    .delete(isLoggedIn, isAuthor, catchAsync(places.deletePlace));
+    .delete(isLoggedIn, isAuthorOrAdmin, catchAsync(places.deletePlace));
 
-router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(places.renderEditForm))
+router.get('/:id/edit', isLoggedIn, isAuthorOrAdmin, catchAsync(places.renderEditForm))
 
 module.exports = router;
