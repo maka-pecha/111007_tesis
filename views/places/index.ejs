@@ -36,7 +36,7 @@
                     </p>
                     <a class="btn btn-primary" href="/places/<%=place._id%>">View</a>
                     <a class="btn btn-secondary" href="/chat/<%=place._id%>">Chat</a>
-                    <% if(currentUser.isAdmin) {%>
+                    <% if(currentUser?.isAdmin) {%>
                     <a class="btn btn-success" href="/donations/place/<%=place._id%>">Donations</a>
                     <% } %>
                 </div>

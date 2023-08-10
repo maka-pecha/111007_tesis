@@ -188,7 +188,8 @@ app.get('/generatePDF/:path', async (req, res) => {
 });
 
 app.all('*', (req, res, next) => {
-    next(new ExpressError('Page Not Found', 404))
+    req.flash('error', 'Page Not Found');
+    return res.redirect('/places');
 })
 
 app.use((err, req, res, next) => {
