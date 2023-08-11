@@ -187,4 +187,41 @@ body {
     border-style: solid;
     border-color: #555 transparent transparent transparent;
 }
+/* Estilo base */
+.faq-div {
+    margin-bottom: 30px;
+}
+
+.faq-div h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.faq-div p {
+    color: #34495e;
+    line-height: 1.6;
+}
+
+/* Estilo para enlaces */
+.faq-div a {
+    color: #2980b9;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.faq-div a:hover {
+    color: #3498db;
+}
+
+/* Decoración adicional */
+hr {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    border: 0;
+    border-top: 1px solid #eaeaea;
+}
+
+h1.text-center {
+    margin-bottom: 40px;
+}
 
