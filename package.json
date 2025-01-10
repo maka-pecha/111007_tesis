@@ -39,7 +39,7 @@
     "puppeteer": "^20.5.0",
     "sanitize-html": "2.7.1",
     "sib-api-v3-sdk": "^8.5.0",
-    "socket.io": "^4.6.1",
+    "socket.io": "^4.6.2",
     "socket.io-client": "^4.6.1",
     "through": "^2.3.8"
   },
